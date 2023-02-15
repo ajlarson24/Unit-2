@@ -1,12 +1,16 @@
 /* Stylesheet by Alex Larson, 2023 */
 /*Add CSS styles here*/
 
-#mydiv {
+/*style for title potentially*/
+#top {
     color: orange;
     font-size: xx-large;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
     background-color: navy;
     width: 80%;
     margin: 0 auto;
-    height: 100px;
+    height: 45px;
 }
+
+#map { height: 400px; width: auto; }
