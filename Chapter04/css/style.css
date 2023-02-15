@@ -11,6 +11,9 @@
     width: 80%;
     margin: 0 auto;
     height: 45px;
+    box-shadow: inset;
 }
 
-#map { height: 400px; width: auto; }
+#map { 
+    height: 400px;
+}
