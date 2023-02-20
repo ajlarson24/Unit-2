@@ -6,7 +6,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var geojsonFeature = {
+/*var geojsonFeature = {
     "type": "Feature",
     "properties": {
         "name": "Coors Field",
@@ -17,7 +17,7 @@ var geojsonFeature = {
         "type": "Point",
         "coordinates": [-104.99404, 39.75621]
     }
-};
+};*/
 
 L.geoJSON(geojsonFeature).addTo(map);
 
