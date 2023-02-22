@@ -31,6 +31,15 @@ function onEachFeature(feature, layer) {
     };
 };
 
+var geojsonMarkerOptions = {
+                radius: 8,
+                fillColor: "#56903a",
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            };
+            
 //function to retrieve the data and place it on the map
 function getData(map){
     //load the data
@@ -39,14 +48,6 @@ function getData(map){
             return response.json();
         })
         .then(function(json){
-            var geojsonMarkerOptions = {
-                radius: 8,
-                fillColor: "#56903a",
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-            };
             //create a Leaflet GeoJSON layer and add it to the map
             L.geoJson(json, {
                 onEachFeature: onEachFeature,
