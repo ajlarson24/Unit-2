@@ -15,7 +15,7 @@ function createMap(){
     }).addTo(map);
 
     //call getData function
-    getData();
+    getData(map);
 };
 
 //added at Example 2.3 line 20...function to attach popups to each mapped feature
@@ -32,7 +32,7 @@ function onEachFeature(feature, layer) {
 };
 
 //function to retrieve the data and place it on the map
-function getData(){
+function getData(map){
     //load the data
     fetch("data/MegaCities.geojson")
         .then(function(response){
@@ -40,7 +40,9 @@ function getData(){
         })
         .then(function(json){
             //create a Leaflet GeoJSON layer and add it to the map
-            L.geoJson(json).addTo(map);
+            L.geoJson(json, {
+                onEachFeature: onEachFeature
+            }).addTo(map);
         })
 };
 
