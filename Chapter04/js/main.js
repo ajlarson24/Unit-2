@@ -47,4 +47,4 @@ function getData(map){
 };
 
 document.addEventListener('DOMContentLoaded',createMap)
-//THIS COMMENT IS FOR UPLOADING TO GITHUB
+//THIS COMMENT IS FOR UPLOADING TO GITHUB AGAIN

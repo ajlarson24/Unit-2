@@ -39,4 +39,4 @@ function onMapClick(e) {
 }
     
 map.on('click', onMapClick);
-//THIS COMMENT IS FOR UPLOADING TO GITHUB
+//THIS COMMENT IS FOR UPLOADING TO GITHUB AGAIN
