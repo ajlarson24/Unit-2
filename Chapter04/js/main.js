@@ -41,7 +41,7 @@ function getData(map){
         .then(function(json){
             var geojsonMarkerOptions = {
                 radius: 8,
-                fillColor: "#ff7800",
+                fillColor: "#56903a",
                 color: "#000",
                 weight: 1,
                 opacity: 1,
