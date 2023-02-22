@@ -2,16 +2,16 @@
 /*Add CSS styles here*/
 
 /*style for title potentially*/
-#top {
-    color: ivory;
+#title {
+    color: darkgreen;
     font-size: xx-large;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
-    background-color: indigo;
+    text-shadow: 1px 1px 3px #fff, 1px 1px 5px #ccc;
+    background-color: sienna;
     width: 80%;
     margin: 0 auto;
     height: 45px;
-    box-shadow: inset;
 }
 
 #map { 
