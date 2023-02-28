@@ -30,7 +30,7 @@ function calculateMinValue(data){
         //loop through each year
         for(var year = 2015; year <= 2021; year+=1){
               //get population for current year
-              var value = park.properties[String(year)+" Visitors"];
+              var value = park.properties["Visitors_"+String(year)];
               //add value to array
               allValues.push(value);
         }
@@ -51,39 +51,54 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
-//Step 3: Add circle markers for point features to the map
-function createPropSymbols(data){
-
-    //Step 4: Determine which attribute to visualize with proportional symbols
-    var attribute = "2015 Visitors";
+//function to convert markers to circle markers
+function pointToLayer(feature, latlng){
+    //Determine which attribute to visualize with proportional symbols
+    var attribute = "Visitors_2015";
 
     //create marker options
-    var geojsonMarkerOptions = {
+    var options = {
         fillColor: "#56903a",
         color: "#000",
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8,
-        radius: 8
+        fillOpacity: 0.8
     };
 
+    //For each feature, determine its value for the selected attribute
+    var attValue = Number(feature.properties[attribute]);
+
+    //Give each feature's circle marker a radius based on its attribute value
+    options.radius = calcPropRadius(attValue);
+
+    //create circle marker layer
+    var layer = L.circleMarker(latlng, options);
+
+    //build popup content string starting with city...Example 2.1 line 24
+    var popupContent = "<p><b>Park:</b> " + feature.properties.Park + "</p>";
+
+    //add formatted attribute to popup content string
+    var year = attribute.split("_")[1];
+    popupContent += "<p><b>Visitors in " + year + ":</b> " + feature.properties[attribute] + " million</p>";
+
+    //bind the popup to the circle marker
+    layer.bindPopup(popupContent, {
+        offset: new L.Point(0,-options.radius)
+    });
+
+    //return the circle marker to the L.geoJson pointToLayer option
+    return layer;
+};
+
+//Add circle markers for point features to the map
+function createPropSymbols(data){
+    //create a Leaflet GeoJSON layer and add it to the map
     L.geoJson(data, {
-        pointToLayer: function (feature, latlng) {
-            //Step 5: For each feature, determine its value for the selected attribute
-            var attValue = Number(feature.properties[attribute]);
-
-            //Step 6: Give each feature's circle marker a radius based on its attribute value
-            geojsonMarkerOptions.radius = calcPropRadius(attValue);
-
-            //create circle markers
-            return L.circleMarker(latlng, geojsonMarkerOptions);
-        }
+        pointToLayer: pointToLayer
     }).addTo(map);
 };
 
-
-//Step 2: Import GeoJSON data
-function getData(){
+function getData(map){
     //load the data
     fetch("data/Parks.geojson")
         .then(function(response){
