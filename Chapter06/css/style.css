@@ -16,7 +16,7 @@
 
 #map { 
     height: 600px;
-    width: 75%;
+    width: 100%;
     display: inline-block;
     }
 
@@ -53,3 +53,26 @@
     float: left;  
     }
 /*THIS LINE ADDED TO REUPLOAD TO GITHUB*/  
+
+.sequence-control-container {  
+    width: 350px;  
+    height: 30px;  
+    background-color: rgba(255,255,255,0.8);  
+    padding: 10px;  
+    line-height: 45px;  
+    text-align: center;  
+    border: solid gray 1px;  
+}  
+
+.range-slider {  
+    width: 250px;  
+}  
+
+.step {  
+    width: 40px;  
+}  
+
+.step img {  
+    width: 100%;  
+    height: auto;  
+} 

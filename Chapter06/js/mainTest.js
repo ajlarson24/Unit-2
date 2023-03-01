@@ -3,7 +3,7 @@ var map;
 var minValue;
 
 //step 1 create map
-function createMap(){
+function createMap() {
 
     //create the map
     map = L.map('map', {
@@ -13,26 +13,26 @@ function createMap(){
 
     //add OSM base tilelayer
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
-	maxZoom: 20
-}).addTo(map);
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
 
     //call getData function
     getData(map);
 };
 
-function calculateMinValue(data){
+function calculateMinValue(data) {
     //create empty array to store all data values
     var allValues = [];
     //loop through each city
-    for(var park of data.features){
+    for (var park of data.features) {
         //loop through each year
-        for(var year = 2015; year <= 2021; year+=1){
-              //get population for current year
-              var value = park.properties["Visitors_"+String(year)];
-              //add value to array
-              allValues.push(value);
+        for (var year = 2015; year <= 2021; year += 1) {
+            //get population for current year
+            var value = park.properties["Visitors_" + String(year)];
+            //add value to array
+            allValues.push(value);
         }
     }
     //get minimum value of our array
@@ -46,17 +46,16 @@ function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
     var minRadius = 5;
     //Flannery Apperance Compensation formula
-    var radius = 1.0083 * Math.pow(attValue/minValue,0.5715) * minRadius
+    var radius = 1.0083 * Math.pow(attValue / minValue, 0.5715) * minRadius
 
     return radius;
 };
 
 //Example 2.1 line 1...function to convert markers to circle markers
-function pointToLayer(feature, latlng, attributes){
+function pointToLayer(feature, latlng, attributes) {
     //Step 4: Assign the current attribute based on the first index of the attributes array
     var attribute = attributes[0];
-    //check
-    console.log(attribute);
+
     //create marker options
     var options = {
         fillColor: "#56903a",
@@ -84,7 +83,7 @@ function pointToLayer(feature, latlng, attributes){
 
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius)
+        offset: new L.Point(0, -options.radius)
     });
 
     //return the circle marker to the L.geoJson pointToLayer option
@@ -92,20 +91,20 @@ function pointToLayer(feature, latlng, attributes){
 };
 
 //Add circle markers for point features to the map
-function createPropSymbols(data, attributes){
+function createPropSymbols(data, attributes) {
     //create a Leaflet GeoJSON layer and add it to the map
     L.geoJson(data, {
-        pointToLayer: function(feature, latlng){
+        pointToLayer: function (feature, latlng) {
             return pointToLayer(feature, latlng, attributes);
         }
     }).addTo(map);
 };
 
 //Step 10: Resize proportional symbols according to new attribute values
-function updatePropSymbols(attribute){
-    map.eachLayer(function(layer){
+function updatePropSymbols(attribute) {
+    map.eachLayer(function (layer) {
         //Example 3.18 line 4
-        if (layer.feature && layer.feature.properties[attribute]){
+        if (layer.feature && layer.feature.properties[attribute]) {
             //access feature properties
             var props = layer.feature.properties;
 
@@ -121,14 +120,25 @@ function updatePropSymbols(attribute){
             popupContent += "<p><b>Visitors in " + year + ":</b> " + props[attribute] + " million</p>";
 
             //update popup content            
-            popup = layer.getPopup();            
+            popup = layer.getPopup();
             popup.setContent(popupContent).update();
         };
     });
 };
 
+/*function createPopupContent(properties, attribute){
+    //add city to popup content string
+    var popupContent = "<p><b>Park:</b> " + properties.Park + "</p>";
+
+    //add formatted attribute to panel content string
+    var year = attribute.split("_")[1];
+    popupContent += "<p><b>Visitors in " + year + ":</b> " + properties[attribute] + " million</p>";
+
+    return popupContent;
+};*/
+
 //Above Example 3.10...Step 3: build an attributes array from the data
-function processData(data){
+function processData(data) {
     //empty array to hold attributes
     var attributes = [];
 
@@ -136,20 +146,16 @@ function processData(data){
     var properties = data.features[0].properties;
 
     //push each attribute name into attributes array
-    for (var attribute in properties){
+    for (var attribute in properties) {
         //only take attributes with population values
-        if (attribute.indexOf("Visitors") > -1){
+        if (attribute.indexOf("Visitors") > -1) {
             attributes.push(attribute);
         };
     };
-
-    //check result
-    console.log(attributes);
-
     return attributes;
 };
 
-//Step 1: Create new sequence controls
+/*//Step 1: Create new sequence controls
 function createSequenceControls(attributes){
     //create range input element (slider)
     var slider = "<input class='range-slider' type='range'></input>";
@@ -158,12 +164,10 @@ function createSequenceControls(attributes){
     document.querySelector(".range-slider").max = 6;
     document.querySelector(".range-slider").min = 0;
     document.querySelector(".range-slider").value = 0;
-    document.querySelector(".range-slider").step = 1;
-   
+    document.querySelector(".range-slider").step = 1;   
     //add step buttons
     document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="reverse"></button>');
-    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="forward"></button>');    
-    
+    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="forward"></button>');   
     //replace buttons with images
     document.querySelector('#reverse').insertAdjacentHTML('beforeend',"<img src='img/reverse.png'>")
     document.querySelector('#forward').insertAdjacentHTML('beforeend',"<img src='img/forward.png'>")
@@ -182,10 +186,8 @@ function createSequenceControls(attributes){
                 //Step 7: if past the first attribute, wrap around to last attribute
                 index = index < 0 ? 6 : index;
             };
-
             //Step 8: update slider
             document.querySelector('.range-slider').value = index;
-
             //Step 9: pass new attribute to update symbols
             updatePropSymbols(attributes[index]);
         })
@@ -198,16 +200,89 @@ function createSequenceControls(attributes){
         //Step 9: pass new attribute to update symbols
         updatePropSymbols(attributes[index]);
     });
+};*/
+
+//Create new sequence controls
+function createSequenceControls(attributes) {
+    var SequenceControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+
+        //Example 2.3 line 1
+        onAdd: function () {
+            // create the control container div with a particular class name
+            var container = L.DomUtil.create('div', 'sequence-control-container');
+
+            //create range input element (slider)
+            container.insertAdjacentHTML('beforeend', '<input class="range-slider" type="range">')
+
+            //set slider attributes
+            container.querySelector(".range-slider").max = 6;
+            container.querySelector(".range-slider").min = 0;
+            container.querySelector(".range-slider").value = 0;
+            container.querySelector(".range-slider").step = 1;
+            //add skip buttons
+            container.insertAdjacentHTML('beforeend', '<button class="step" id="reverse" title="Reverse"><img src="img/reverse.png"></button>');
+            container.insertAdjacentHTML('beforeend', '<button class="step" id="forward" title="Forward"><img src="img/forward.png"></button>');
+
+
+            container.querySelectorAll('.step').forEach(function (step) {
+                step.addEventListener("click", function () {
+                    var index = container.querySelector('.range-slider').value;
+
+                    //Step 6: increment or decrement depending on button clicked
+                    if (step.id == 'forward') {
+                        index++;
+                        //Step 7: if past the last attribute, wrap around to first attribute
+                        index = index > 6 ? 0 : index;
+                    } else if (step.id == 'reverse') {
+                        index--;
+                        //Step 7: if past the first attribute, wrap around to last attribute
+                        index = index < 0 ? 6 : index;
+                    };
+                    //Step 8: update slider
+                    container.querySelector('.range-slider').value = index;
+                    //Step 9: pass new attribute to update symbols
+                    updatePropSymbols(attributes[index]);
+                })
+            })
+            //Step 5: input listener for slider
+            container.querySelector('.range-slider').addEventListener('input', function () {
+                //Step 6: get the new index value
+                var index = this.value;
+
+                //Step 9: pass new attribute to update symbols
+                updatePropSymbols(attributes[index]);
+            });
+
+
+
+            //disable any mouse event listeners for the container
+            L.DomEvent.disableClickPropagation(container);
+            return container;
+        }
+    });
+
+    map.addControl(new SequenceControl());    // add listeners after adding control}
+    //Step 5: input listener for slider
+    container.querySelector('.range-slider').addEventListener('input', function(){
+        //Step 6: get the new index value
+        var index = this.value;
+        
+        //Step 9: pass new attribute to update symbols
+        updatePropSymbols(attributes[index]);
+    });
 };
 
-function getData(map){
+function getData(map) {
     //load the data
     fetch("data/Parks.geojson")
-        .then(function(response){
+        .then(function (response) {
             return response.json();
         })
-        .then(function(json){
-             //create an attributes array
+        .then(function (json) {
+            //create an attributes array
             var attributes = processData(json);
             minValue = calculateMinValue(json);
             createPropSymbols(json, attributes);
@@ -215,4 +290,4 @@ function getData(map){
         })
 };
 
-document.addEventListener('DOMContentLoaded',createMap)
+document.addEventListener('DOMContentLoaded', createMap)
