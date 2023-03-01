@@ -16,4 +16,39 @@
 
 #map { 
     height: 600px;
+    width: 80%;
+    display: inline-block;
+    }
+
+.leaflet-popup-content p {
+    margin: 0.2em 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: navy;
 }
+
+#panel {  
+    width: 17%;  
+    padding: 20px;  
+    display: inline-block;  
+    vertical-align: top;  
+    text-align: center;  
+    line-height: 42px;  
+}  
+
+.range-slider {  
+    width: 45%;  
+}  
+
+.step {  
+    width: 20%;  
+}  
+
+.step img {  
+    width: 70%;  
+}
+#forward {
+    float: right;
+    }
+#reverse {  
+    float: left;  
+    }  
