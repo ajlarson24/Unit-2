@@ -22,7 +22,7 @@ function createMap(){
     getData(map);
 };
 
-function calcMinValue(data){
+function calculateMinValue(data){
     //create empty array to store all data values
     var allValues = [];
     //loop through each city
@@ -101,44 +101,6 @@ function createPropSymbols(data, attributes){
     }).addTo(map);
 };
 
-//Step 1: Create new sequence controls
-function createSequenceControls(){
-    //create range input element (slider)
-    var slider = "<input class='range-slider' type='range'></input>";
-    document.querySelector("#panel").insertAdjacentHTML('beforeend',slider);
-    //set slider attributes
-    document.querySelector(".range-slider").max = 6;
-    document.querySelector(".range-slider").min = 0;
-    document.querySelector(".range-slider").value = 0;
-    document.querySelector(".range-slider").step = 1;
-   
-    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="reverse"></button>');
-    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="forward"></button>');    
-    
-    document.querySelector('#reverse').insertAdjacentHTML('beforeend',"<img src='img/reverse.png'>")
-    document.querySelector('#forward').insertAdjacentHTML('beforeend',"<img src='img/forward.png'>")
-
-    document.querySelectorAll('.step').forEach(function(step){
-        step.addEventListener("click", function(){
-            var index = document.querySelector('.range-slider').value;
-
-            //Step 6: increment or decrement depending on button clicked
-            if (step.id == 'forward'){
-                index++;
-                //Step 7: if past the last attribute, wrap around to first attribute
-                index = index > 6 ? 0 : index;
-            } else if (step.id == 'reverse'){
-                index--;
-                //Step 7: if past the first attribute, wrap around to last attribute
-                index = index < 0 ? 6 : index;
-            };
-
-            //Step 8: update slider
-            document.querySelector('.range-slider').value = index;
-        })
-    })
-};
-
 //Step 10: Resize proportional symbols according to new attribute values
 function updatePropSymbols(attribute){
     map.eachLayer(function(layer){
@@ -187,6 +149,57 @@ function processData(data){
     return attributes;
 };
 
+//Step 1: Create new sequence controls
+function createSequenceControls(attributes){
+    //create range input element (slider)
+    var slider = "<input class='range-slider' type='range'></input>";
+    document.querySelector("#panel").insertAdjacentHTML('beforeend',slider);
+    //set slider attributes
+    document.querySelector(".range-slider").max = 6;
+    document.querySelector(".range-slider").min = 0;
+    document.querySelector(".range-slider").value = 0;
+    document.querySelector(".range-slider").step = 1;
+   
+    //add step buttons
+    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="reverse"></button>');
+    document.querySelector('#panel').insertAdjacentHTML('beforeend','<button class="step" id="forward"></button>');    
+    
+    //replace buttons with images
+    document.querySelector('#reverse').insertAdjacentHTML('beforeend',"<img src='img/reverse.png'>")
+    document.querySelector('#forward').insertAdjacentHTML('beforeend',"<img src='img/forward.png'>")
+
+    document.querySelectorAll('.step').forEach(function(step){
+        step.addEventListener("click", function(){
+            var index = document.querySelector('.range-slider').value;
+
+            //Step 6: increment or decrement depending on button clicked
+            if (step.id == 'forward'){
+                index++;
+                //Step 7: if past the last attribute, wrap around to first attribute
+                index = index > 6 ? 0 : index;
+            } else if (step.id == 'reverse'){
+                index--;
+                //Step 7: if past the first attribute, wrap around to last attribute
+                index = index < 0 ? 6 : index;
+            };
+
+            //Step 8: update slider
+            document.querySelector('.range-slider').value = index;
+
+            //Step 9: pass new attribute to update symbols
+            updatePropSymbols(attributes[index]);
+        })
+    })
+    //Step 5: input listener for slider
+    document.querySelector('.range-slider').addEventListener('input', function(){
+        //Step 6: get the new index value
+        var index = this.value;
+    
+        //Step 9: pass new attribute to update symbols
+        updatePropSymbols(attributes[index]);
+    });
+};
+
 function getData(map){
     //load the data
     fetch("data/Parks.geojson")
@@ -196,7 +209,7 @@ function getData(map){
         .then(function(json){
              //create an attributes array
             var attributes = processData(json);
-            minValue = calcMinValue(json);
+            minValue = calculateMinValue(json);
             createPropSymbols(json, attributes);
             createSequenceControls(attributes);
         })
