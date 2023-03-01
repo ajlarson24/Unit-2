@@ -15,40 +15,5 @@
 }
 
 #map { 
-    height: 600px;
-    width: 75%;
-    display: inline-block;
-    }
-
-.leaflet-popup-content p {
-    margin: 0.2em 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: navy;
+    height: 800px;
 }
-
-#panel {  
-    width: 20%;  
-    padding: 20px;  
-    display: inline-block;  
-    vertical-align: top;  
-    text-align: center;  
-    line-height: 42px;  
-}  
-
-.range-slider {  
-    width: 45%;  
-}  
-
-.step {  
-    width: 20%;  
-}  
-
-.step img {  
-    width: 90%;  
-}
-#forward {
-    float: right;
-    }
-#reverse {  
-    float: left;  
-    }  

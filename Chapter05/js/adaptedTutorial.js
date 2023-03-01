@@ -5,8 +5,8 @@ var map;
 function createMap(){
     //create the map
     map = L.map('map', {
-        center: [39.8282, -98.5795],
-        zoom: 4
+        center: [20, 0],
+        zoom: 2
     });
 
     //add OSM base tilelayer
@@ -34,25 +34,14 @@ function onEachFeature(feature, layer) {
 //function to retrieve the data and place it on the map
 function getData(map){
     //load the data
-    fetch("data/Parks.geojson")
+    fetch("data/MegaCities.geojson")
         .then(function(response){
             return response.json();
         })
         .then(function(json){
-            var geojsonMarkerOptions = {
-                radius: 8,
-                fillColor: "#56903a",
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-            };
             //create a Leaflet GeoJSON layer and add it to the map
             L.geoJson(json, {
-                onEachFeature: onEachFeature,
-                pointToLayer: function (feature, latlng){
-                    return L.circleMarker(latlng, geojsonMarkerOptions);
-                }
+                onEachFeature: onEachFeature
             }).addTo(map);
         })
 };

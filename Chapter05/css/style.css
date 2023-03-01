@@ -1,0 +1,54 @@
+/* Stylesheet by Alex Larson, 2023 */
+/*Add CSS styles here*/
+
+/*style for title potentially*/
+#title {
+    color: darkgreen;
+    font-size: xx-large;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    text-shadow: 1px 1px 5px #fff, 1px 1px 5px #ccc;
+    background-color: sienna;
+    width: 80%;
+    margin: 0 auto;
+    height: 45px;
+}
+
+#map { 
+    height: 600px;
+    width: 75%;
+    display: inline-block;
+    }
+
+.leaflet-popup-content p {
+    margin: 0.2em 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: navy;
+}
+
+#panel {  
+    width: 20%;  
+    padding: 20px;  
+    display: inline-block;  
+    vertical-align: top;  
+    text-align: center;  
+    line-height: 42px;  
+}  
+
+.range-slider {  
+    width: 45%;  
+}  
+
+.step {  
+    width: 20%;  
+}  
+
+.step img {  
+    width: 90%;  
+}
+#forward {
+    float: right;
+    }
+#reverse {  
+    float: left;  
+    }  
