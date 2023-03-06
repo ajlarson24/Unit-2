@@ -23,7 +23,7 @@
 .leaflet-popup-content p {
     margin: 0.2em 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: navy;
+    color: #56903a;
 }
 
 #panel {  
@@ -36,7 +36,7 @@
 }  
 
 .range-slider {  
-    width: 45%;  
+    width: 45%; 
 }  
 
 .step {  
@@ -52,7 +52,6 @@
 #reverse {  
     float: left;  
     }
-/*THIS LINE ADDED TO REUPLOAD TO GITHUB*/  
 
 .sequence-control-container {  
     width: 350px;  
@@ -75,4 +74,18 @@
 .step img {  
     width: 100%;  
     height: auto;  
-} 
+}
+
+.legend-control-container {
+    width: 250px;
+    height: 110px;
+    font-weight: bold;
+    background-color: #ccc;
+    padding: 10px;
+    text-align: center;
+    border: solid #ccc 1px;
+}
+
+.legend-control-container p{
+    margin: 0;
+}
