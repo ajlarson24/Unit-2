@@ -3,11 +3,11 @@
 
 /*style for title potentially*/
 #title {
-    color: darkgreen;
+    color: #56903a;
     font-size: xx-large;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
-    text-shadow: 1px 1px 5px #fff, 1px 1px 5px #ccc;
+    text-shadow: 1px 1px 5px #ccc, 1px 1px 5px #ccc;
     background-color: sienna;
     width: 80%;
     margin: 0 auto;
@@ -80,7 +80,7 @@
     width: 250px;
     height: 110px;
     font-weight: bold;
-    background-color: #ccc;
+    background-color: whitesmoke;
     padding: 10px;
     text-align: center;
     border: solid #ccc 1px;
@@ -88,4 +88,15 @@
 
 .legend-control-container p{
     margin: 0;
+}
+
+#info{    
+    color: #56903a;
+    font-size: medium;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    text-align: left;
+    background-color: whitesmoke;
+    width: 100%;
+    margin: 0 auto;
+    height: 100px;
 }
