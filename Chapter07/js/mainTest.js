@@ -108,37 +108,90 @@ function createPropSymbols(data, attributes) {
     }).addTo(map);
 };
 
+function getCircleValues(attribute) {
+  //start with min at highest possible and max at lowest possible number
+  var min = Infinity,
+    max = -Infinity;
+
+  map.eachLayer(function (layer) {
+    //get the attribute value
+    if (layer.feature) {
+      var attributeValue = Number(layer.feature.properties[attribute]);
+
+      //test for min
+      if (attributeValue < min) {
+        min = attributeValue;
+      }
+
+      //test for max
+      if (attributeValue > max) {
+        max = attributeValue;
+      }
+    }
+  });
+
+  //set mean
+  var mean = (max + min) / 2;
+
+  //return values as an object
+  return {
+    max: max,
+    mean: mean,
+    min: min,
+  };
+}
+
+function updateLegend(attribute) {
+  //create content for legend
+  var year = attribute.split("_")[1];
+  //replace legend content
+  document.querySelector("span.year").innerHTML = year;
+
+  //get the max, mean, and min values as an object
+  var circleValues = getCircleValues(attribute);
+
+  for (var key in circleValues) {
+    //get the radius
+    var radius = calcPropRadius(circleValues[key]);
+
+    document.querySelector("#" + key).setAttribute("cy", 59 - radius);
+    document.querySelector("#" + key).setAttribute("r", radius)
+
+    document.querySelector("#" + key + "-text").textContent = Math.round(circleValues[key] * 100) / 100 + " million";
+  }
+}
+
 //Step 10: Resize proportional symbols according to new attribute values
 function updatePropSymbols(attribute) {
-    var year = attribute.split("_")[1];
-    //update temporal legend
-    document.querySelector("span.year").innerHTML = year;
+  map.eachLayer(function (layer) {
+    if (layer.feature && layer.feature.properties[attribute]) {
+      //access feature properties
+      var props = layer.feature.properties;
 
-    map.eachLayer(function (layer) {
-        //Example 3.18 line 4
-        if (layer.feature && layer.feature.properties[attribute]) {
-            //access feature properties
-            var props = layer.feature.properties;
+      //update each feature's radius based on new attribute values
+      var radius = calcPropRadius(props[attribute]);
+      layer.setRadius(radius);
 
-            //update each feature's radius based on new attribute values
-            var radius = calcPropRadius(props[attribute]);
-            layer.setRadius(radius);
+      //add city to popup content string
+      var popupContent = "<p><b>Park:</b> " + props.Park + "</p>";
 
-            //add city to popup content string
-            var popupContent = "<p><b>Park:</b> " + props.Park + "</p>";
+      //add formatted attribute to panel content string
+      var year = attribute.split("_")[1];
+      popupContent +=
+        "<p><b>Population in " +
+        year +
+        ":</b> " +
+        props[attribute] +
+        " million</p>";
 
-            //add formatted attribute to panel content string
-            var year = attribute.split("_")[1];
-            popupContent += "<p><b>Visitors in " + year + ":</b> " + props[attribute] + " million</p>";
+      //update popup with new content
+      popup = layer.getPopup();
+      popup.setContent(popupContent).update();
+    }
+  });
 
-            //update popup content            
-            popup = layer.getPopup();
-            popup.setContent(popupContent).update();
-        }
-    });
-
-    updateLegend(attribute);
-};
+  updateLegend(attribute);
+}
 
 //Above Example 3.10...Step 3: build an attributes array from the data
 function processData(data) {
@@ -257,16 +310,26 @@ function createLegend(attributes){
 
             //circle string            
                 svg += 
-                    '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + 
-                    '"cy="' + cy + '" fill="#56903a" fill-opacity="0.8" stroke="#000000" cx="55"/>';
+                    '<circle class="legend-circle" id="' + 
+                    circles[i] + 
+                    '" r="' + 
+                    radius + 
+                    '"cy="' + 
+                    cy + 
+                    '" fill="#56903a" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
                 //evenly space out labels            
                 var textY = i * 25 + 25;            
 
                 //text string            
                 svg += 
-                    '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">' + 
-                    Math.round(dataStats[circles[i]]*100)/100 + " million" + '</text>';
+                    '<text id="' + 
+                    circles[i] + 
+                    '-text" x="120" y="' + 
+                    textY + '">' + 
+                    Math.round(dataStats[circles[i]]*100)/100 + 
+                    " million" + 
+                    '</text>';
             };
 
         //close svg string
@@ -298,4 +361,3 @@ function getData(map) {
 };
 
 document.addEventListener('DOMContentLoaded', createMap)
-//ADDED TO REUPLOAD TO GITHUB
